@@ -1,10 +1,4 @@
 <template>
-  <!-- <ul>
-    <li v-for="ticket in ticketList" :key="ticket.id">
-      {{ ticket.subject }}
-    </li>
-  </ul> -->
-
   <div class="overflow-auto">
     <b-pagination
       v-model="currentPage"
@@ -21,8 +15,20 @@
       :current-page="currentPage"
       small
     >
-      <template #cell(subject)="subject">
-        <a href="#">{{ subject.value }}</a>
+      <template #cell(id)="id">
+        <span>{{ id.value }}</span>
+      </template>
+      <template #cell()="row">
+        <a :href="'/tickets/' + row.item.id">{{ row.item.subject }}</a>
+      </template>
+      <template #cell(updated)="updated">
+        <span>{{ updated.value }}</span>
+      </template>
+      <template #cell(priority)="priority">
+        <span>{{ priority.value }}</span>
+      </template>
+      <template #cell(status)="status">
+        <span>{{ status.value }}</span>
       </template>
     </b-table>
   </div>
@@ -79,11 +85,13 @@ export default {
       this.ticketList = this.tickets.map((ele) => {
         return {
           id: ele.id,
+          via: ele.via,
           subject: ele.subject,
           description: ele.description,
           updated: ele.updated_at,
           priority: ele.priority,
           status: ele.status,
+          tags: ele.tags,
         };
       });
     },

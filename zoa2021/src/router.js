@@ -15,5 +15,11 @@ export default new Router({
       name: 'Tickets',
       component: () => import('./components/TicketList'),
     },
+    {
+      path: '/tickets/:id',
+      name: 'Ticket Detail',
+      component: () => import('./components/TicketDetail'),
+      props: true,
+    },
   ],
 });

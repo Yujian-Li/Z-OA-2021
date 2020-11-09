@@ -5,7 +5,8 @@ const app = express();
 app.use(cors());
 
 const ticketController = require('./controller/ticket.js');
-app.get('/tickets', ticketController.getTickets);
+app.get('/tickets', ticketController.getTicketList);
+app.get('/tickets/:id', ticketController.getTicket);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
