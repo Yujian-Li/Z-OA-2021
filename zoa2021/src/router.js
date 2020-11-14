@@ -21,5 +21,10 @@ export default new Router({
       component: () => import('./components/TicketDetail'),
       props: true,
     },
+    {
+      path: '*',
+      name: 'Page Not Found',
+      component: () => import('./components/PageNotFound'),
+    },
   ],
 });
