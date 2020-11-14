@@ -10,9 +10,9 @@
       >
     </b-breadcrumb>
     <h3>{{ ticket.subject }}</h3>
-    <span>Via: {{ ticket.via.channel }}</span>
+    <span>Via: {{ ticket.via && ticket.via.channel }}</span>
     <div>{{ ticket.description }}</div>
-    <div>{{ ticket.updated_at }}</div>
+    <div>Last Updated: {{ ticket.updated_at }}</div>
 
     <h5>
       <b-badge
@@ -32,12 +32,13 @@
 import api from "../api";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+import moment from "moment";
 
 export default {
   data() {
     return {
       ticketId: "",
-      ticket: null,
+      ticket: {},
     };
   },
 
@@ -49,8 +50,9 @@ export default {
 
   methods: {
     async getTicketDetail(id) {
-      this.ticket = (await api.get("/tickets/" + id)).data.ticket;
+      this.ticket = (await api.get("/tickets/ticket/" + id)).data.ticket;
       this.ticketId = "Ticket #" + this.id;
+      this.ticket.updated_at = moment(this.ticket.updated_at).calendar();
     },
   },
 };

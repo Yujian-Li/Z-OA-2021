@@ -1,6 +1,5 @@
 <template>
   <div class="overflow-auto">
-    <!-- //TODO show ... -->
     <b-pagination
       v-model="currentPage"
       :per-page="perPage"
@@ -39,6 +38,7 @@
 import api from "../api";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+import moment from "moment";
 
 export default {
   data() {
@@ -59,9 +59,8 @@ export default {
         },
         {
           key: "updated_at",
-          //TODO: formate into calender time
           formatter: (value) => {
-            return value;
+            return moment(value).calendar();
           },
         },
         {
@@ -99,6 +98,7 @@ export default {
       if (total.refreshed_at === null) {
         this.rows = total.value;
         this.updating = true;
+        //not sure
         setTimeout(this.getTotal, 10000);
       } else {
         if (this.updating) {
