@@ -44,7 +44,6 @@ export default {
   data() {
     return {
       links: null,
-      ticketList: [],
       perPage: 25,
       currentPage: 1,
       previousPage: null,
@@ -78,21 +77,6 @@ export default {
   },
 
   methods: {
-    async getTicketList() {
-      this.tickets = (await api.get("/tickets")).data.tickets;
-      this.ticketList = this.tickets.map((ele) => {
-        return {
-          id: ele.id,
-          via: ele.via,
-          subject: ele.subject,
-          description: ele.description,
-          updated: ele.updated_at,
-          priority: ele.priority,
-          status: ele.status,
-          tags: ele.tags,
-        };
-      });
-    },
     async getTotal() {
       const total = (await api.get("/tickets/count")).data.count;
       if (total.refreshed_at === null) {
