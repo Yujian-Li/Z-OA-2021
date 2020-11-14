@@ -8,7 +8,7 @@ module.exports = {
     res.json(tickets);
   },
   getTicketById: async (req, res) => {
-    const ticket = await service.getTicketById(req.query.id);
+    const ticket = await service.getTicketById(req.params.id);
     res.json(ticket);
   },
 
