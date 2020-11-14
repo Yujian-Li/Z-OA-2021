@@ -1,30 +1,53 @@
 const axios = require('axios');
-const ticketConfig = require('../config/ticketConfig.json');
+const ticketConfig = require('../config/ticketConfig');
 const authConfig = require('../config/authConfig.json');
 
 module.exports = {
   getTicketList: async () => {
     try {
-      const response = await axios.get(ticketConfig.list, {
+      const response = await axios.get(ticketConfig.list(), {
         auth: authConfig,
       });
 
       return response.data;
     } catch (ex) {
-      console.log(ex.message);
+      console.log(ex);
       return ex.message;
     }
   },
 
-  getTicket: async (id) => {
+  getTicketById: async (id) => {
     try {
-      const response = await axios.get(ticketConfig.ticket + id + '.json', {
+      const response = await axios.get(ticketConfig.ticket(id), {
         auth: authConfig,
       });
       return response.data;
     } catch (ex) {
-      console.log(ex.message);
       return ex.message;
     }
+  },
+
+  getPageBySize: async (perPage) => {
+    return await axios.get(ticketConfig.listBySize(perPage), {
+      auth: authConfig,
+    });
+  },
+
+  getNeighborPage: async (url) => {
+    return await axios.get(url, {
+      auth: authConfig,
+    });
+  },
+
+  getPage: async (pageNum, perPage) => {
+    return await axios.get(ticketConfig.listByPageAndSize(pageNum, perPage), {
+      auth: authConfig,
+    });
+  },
+
+  getTotal: async () => {
+    return await axios.get(ticketConfig.count(), {
+      auth: authConfig,
+    });
   },
 };

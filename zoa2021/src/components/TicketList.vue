@@ -1,15 +1,17 @@
 <template>
   <div class="overflow-auto">
+    <!-- //TODO show ... -->
     <b-pagination
       v-model="currentPage"
-      :total-rows="rows"
       :per-page="perPage"
+      :total-rows="rows"
       aria-controls="tickets-table"
-    ></b-pagination>
+    >
+    </b-pagination>
 
     <b-table
       id="tickets-table"
-      :items="ticketList"
+      :items="getPageTickets"
       :fields="fields"
       :per-page="perPage"
       :current-page="currentPage"
@@ -21,8 +23,8 @@
       <template #cell()="row">
         <a :href="'/tickets/' + row.item.id">{{ row.item.subject }}</a>
       </template>
-      <template #cell(updated)="updated">
-        <span>{{ updated.value }}</span>
+      <template #cell(updated_at)="updated_at">
+        <span>{{ updated_at.value }}</span>
       </template>
       <template #cell(priority)="priority">
         <span>{{ priority.value }}</span>
@@ -41,10 +43,13 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 export default {
   data() {
     return {
-      tickets: [],
+      links: null,
       ticketList: [],
       perPage: 25,
       currentPage: 1,
+      previousPage: null,
+      updating: false,
+      rows: null,
       fields: [
         {
           key: "id",
@@ -53,7 +58,7 @@ export default {
           key: "subject",
         },
         {
-          key: "updated",
+          key: "updated_at",
           //TODO: formate into calender time
           formatter: (value) => {
             return value;
@@ -70,13 +75,7 @@ export default {
   },
 
   mounted() {
-    //TODO: return first 200
-    this.getTicketList();
-  },
-  computed: {
-    rows() {
-      return this.ticketList.length;
-    },
+    this.getTotal();
   },
 
   methods: {
@@ -94,6 +93,59 @@ export default {
           tags: ele.tags,
         };
       });
+    },
+    async getTotal() {
+      const total = (await api.get("/tickets/count")).data.count;
+      if (total.refreshed_at === null) {
+        this.rows = total.value;
+        this.updating = true;
+        setTimeout(this.getTotal, 10000);
+      } else {
+        if (this.updating) {
+          // show snackbar
+        }
+        this.rows = total.value;
+        this.updating = false;
+      }
+    },
+    async getFirstPage() {
+      const res = (
+        await api.get("/tickets/pagebysize", {
+          perPage: this.perPage,
+        })
+      ).data.tickets;
+      return res;
+    },
+    async getPageTickets(context) {
+      const page = context.currentPage;
+      let res = null;
+      if (this.previousPage === null) {
+        res = await this.getFirstPage();
+      } else if (
+        page - this.previousPage === -1 &&
+        this.links &&
+        this.links.prev
+      ) {
+        res = (await api.get("/tickets/neighbor", { url: this.links.prev }))
+          .data.tickets;
+      } else if (
+        page - this.previousPage === 1 &&
+        this.links &&
+        this.links.next
+      ) {
+        res = (await api.get("/tickets/neighbor", { url: this.links.next }))
+          .data.tickets;
+      } else {
+        res = (
+          await api.get("/tickets/page", {
+            pageNum: page,
+            perPage: this.perPage,
+          })
+        ).data.tickets;
+      }
+      this.links = res.links;
+      this.previousPage = page;
+      return res.tickets;
     },
   },
 };
