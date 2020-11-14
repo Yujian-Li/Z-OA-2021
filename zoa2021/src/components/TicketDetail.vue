@@ -1,30 +1,42 @@
 <template>
-  <div>
+  <div class="ticket-detail">
     <b-breadcrumb>
       <b-breadcrumb-item href="/tickets">Ticket List</b-breadcrumb-item>
       <b-breadcrumb-item active
         >{{ ticketId }}
-        <b-badge :variant="ticket.status === 'open' ? 'danger' : 'success'">{{
-          ticket.status
-        }}</b-badge></b-breadcrumb-item
+        <b-badge
+          :variant="
+            ticket.status === 'open'
+              ? 'danger'
+              : ticket.status === 'pending'
+              ? 'primary'
+              : 'success'
+          "
+          >{{ ticket.status }}</b-badge
+        ></b-breadcrumb-item
       >
     </b-breadcrumb>
     <h3>{{ ticket.subject }}</h3>
-    <span>Via: {{ ticket.via && ticket.via.channel }}</span>
-    <div>{{ ticket.description }}</div>
-    <div>Last Updated: {{ ticket.updated_at }}</div>
+    <span class="text-muted">Via: {{ ticket.via && ticket.via.channel }}</span>
+    <div class="description">{{ ticket.description }}</div>
+    <div class="text-muted ticket-row">
+      Last Updated: {{ ticket.updated_at }}
+    </div>
 
-    <h5>
-      <b-badge
-        class="tag"
-        variant="info"
-        v-for="(tag, index) in ticket.tags"
-        :key="index"
-      >
-        {{ tag }}
-      </b-badge>
-    </h5>
-    <div>Piority: {{ ticket.priority }}</div>
+    <div class="ticket-row">
+      Tags:
+      <span>
+        <b-badge
+          class="tag"
+          variant="info"
+          v-for="(tag, index) in ticket.tags"
+          :key="index"
+        >
+          {{ tag }}
+        </b-badge>
+      </span>
+    </div>
+    <div class="ticket-row">Piority: {{ ticket.priority }}</div>
   </div>
 </template>
 
@@ -58,7 +70,17 @@ export default {
 };
 </script>
 <style scoped>
+.ticket-detail {
+  margin: 1em 2em;
+}
 .tag {
   margin-right: 1em;
+  font-size: 1em;
+}
+.description {
+  margin: 1em 0;
+}
+.ticket-row {
+  margin-top: 1em;
 }
 </style>

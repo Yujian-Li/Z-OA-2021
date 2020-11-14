@@ -1,10 +1,11 @@
 <template>
-  <div class="overflow-auto">
+  <div class="overflow-auto ticket-list">
     <b-pagination
       v-model="currentPage"
       :per-page="perPage"
       :total-rows="rows"
       aria-controls="tickets-table"
+      limit="10"
     >
     </b-pagination>
 
@@ -29,7 +30,16 @@
         <span>{{ priority.value }}</span>
       </template>
       <template #cell(status)="status">
-        <span>{{ status.value }}</span>
+        <b-badge
+          :variant="
+            status.value === 'open'
+              ? 'danger'
+              : status.value === 'pending'
+              ? 'primary'
+              : 'success'
+          "
+          >{{ status.value }}</b-badge
+        >
       </template>
     </b-table>
   </div>
@@ -134,3 +144,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.ticket-list {
+  margin: 1em 2em;
+}
+</style>
