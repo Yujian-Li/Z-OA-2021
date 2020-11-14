@@ -4,27 +4,15 @@ const authConfig = require('../config/authConfig.json');
 
 module.exports = {
   getTicketList: async () => {
-    try {
-      const response = await axios.get(ticketConfig.list(), {
-        auth: authConfig,
-      });
-
-      return response.data;
-    } catch (ex) {
-      console.log(ex);
-      return ex.message;
-    }
+    return await axios.get(ticketConfig.list(), {
+      auth: authConfig,
+    });
   },
 
   getTicketById: async (id) => {
-    try {
-      const response = await axios.get(ticketConfig.ticket(id), {
-        auth: authConfig,
-      });
-      return response.data;
-    } catch (ex) {
-      return ex.message;
-    }
+    return await axios.get(ticketConfig.ticket(id), {
+      auth: authConfig,
+    });
   },
 
   getPageBySize: async (perPage) => {

@@ -2,14 +2,25 @@ const { response } = require('express');
 const service = require('../service/ticketService.js');
 
 module.exports = {
-  //TODO: try catch in controller
+  //getTicketList is not in user
   getTicketList: async (req, res) => {
-    const tickets = await service.getTicketList();
-    res.json(tickets);
+    try {
+      const response = await service.getTicketList();
+      res.json(response.data);
+    } catch (ex) {
+      console.log(ex);
+      res.json({ error: ex.message });
+    }
   },
+
   getTicketById: async (req, res) => {
-    const ticket = await service.getTicketById(req.params.id);
-    res.json(ticket);
+    try {
+      const response = await service.getTicketById(req.params.id);
+      res.json(response.data);
+    } catch (ex) {
+      console.log(ex);
+      res.json({ error: ex.message });
+    }
   },
 
   getPageBySize: async (req, res) => {
