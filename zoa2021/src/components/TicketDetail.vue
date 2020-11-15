@@ -17,13 +17,15 @@
       >
     </b-breadcrumb>
     <h3>{{ ticket.subject }}</h3>
-    <span class="text-muted">Via: {{ ticket.via && ticket.via.channel }}</span>
+    <span class="text-muted" v-if="!error"
+      >Via: {{ ticket.via && ticket.via.channel }}</span
+    >
     <div class="description">{{ ticket.description }}</div>
-    <div class="text-muted ticket-row">
+    <div class="text-muted ticket-row" v-if="!error">
       Last Updated: {{ ticket.updated_at }}
     </div>
 
-    <div class="ticket-row">
+    <div class="ticket-row" v-if="!error">
       Tags:
       <span>
         <b-badge
@@ -36,7 +38,14 @@
         </b-badge>
       </span>
     </div>
-    <div class="ticket-row">Piority: {{ ticket.priority }}</div>
+    <div class="ticket-row" v-if="!error">Piority: {{ ticket.priority }}</div>
+
+    <b-modal v-model="showModal" hide-footer>
+      <h4>{{ error }}</h4>
+      <b-button class="mt-3" variant="outline-primary" href="/tickets"
+        >Back</b-button
+      >
+    </b-modal>
   </div>
 </template>
 
@@ -51,6 +60,8 @@ export default {
     return {
       ticketId: "",
       ticket: {},
+      error: null,
+      showModal: false,
     };
   },
 
@@ -62,9 +73,16 @@ export default {
 
   methods: {
     async getTicketDetail(id) {
-      this.ticket = (await api.get("/tickets/ticket/" + id)).data.ticket;
-      this.ticketId = "Ticket #" + this.id;
-      this.ticket.updated_at = moment(this.ticket.updated_at).calendar();
+      const response = (await api.get("/tickets/ticket/" + id)).data;
+      if (response.error) {
+        this.error = response.error;
+        this.showModal = true;
+        console.log("hhbh", this.error);
+      } else {
+        this.ticket = response.ticket;
+        this.ticketId = "Ticket #" + this.id;
+        this.ticket.updated_at = moment(this.ticket.updated_at).calendar();
+      }
     },
   },
 };
