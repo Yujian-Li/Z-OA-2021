@@ -1,4 +1,4 @@
-# Coding Assessment - Engineering Intern Program 2021 @ Zendesk
+# Coding Assessment - Engineering Intern Program 2021
 
 ## Technology
 
