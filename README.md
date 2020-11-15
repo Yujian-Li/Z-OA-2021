@@ -1,4 +1,4 @@
-# Coding Assessment - Engineering Intern Program 2021
+# Coding Assessment - TicketViewer
 
 ## Technology
 
