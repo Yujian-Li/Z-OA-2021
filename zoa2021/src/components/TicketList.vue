@@ -1,6 +1,7 @@
 <template>
   <div class="overflow-auto ticket-list">
     <b-pagination
+      v-if="rows"
       v-model="currentPage"
       :per-page="perPage"
       :total-rows="rows"
@@ -21,7 +22,13 @@
         <span>{{ id.value }}</span>
       </template>
       <template #cell()="row">
-        <a :href="'/tickets/' + row.item.id">{{ row.item.subject }}</a>
+        <router-link
+          :to="{
+            name: 'Ticket Detail',
+            params: { currentPage, id: row.item.id },
+          }"
+          >{{ row.item.subject }}</router-link
+        >
       </template>
       <template #cell(updated_at)="updated_at">
         <span>{{ updated_at.value }}</span>
@@ -91,7 +98,6 @@ export default {
     return {
       links: null,
       perPage: 25,
-      currentPage: 1,
       previousPage: null,
       updating: false,
       rows: null,
@@ -117,8 +123,11 @@ export default {
           key: "status",
         },
       ],
+      currentPage: this.currentPageProp || 1,
     };
   },
+
+  props: ["currentPageProp", "test"],
 
   mounted() {
     this.getTotal();
@@ -144,18 +153,28 @@ export default {
       }
     },
     async getFirstPage() {
-      const res = await api.get("/tickets/pagebysize", {
+      return await api.get("/tickets/pagebysize", {
         perPage: this.perPage,
       });
-      return res;
+    },
+    async getSpecificPage(page) {
+      return await api.get("/tickets/page", {
+        pageNum: page,
+        perPage: this.perPage,
+      });
     },
     async getPageTickets(context) {
       const page = context.currentPage;
+      console.log("geting page", page);
       let res = null;
 
       //Use curse pagination if possible, otherwise use offset pagination
       if (this.previousPage === null) {
-        res = await this.getFirstPage();
+        if (page === 1) {
+          res = await this.getFirstPage();
+        } else {
+          res = await this.getSpecificPage(page);
+        }
       } else if (
         page - this.previousPage === -1 &&
         this.links &&
@@ -169,10 +188,7 @@ export default {
       ) {
         res = await api.get("/tickets/neighbor", { url: this.links.next });
       } else {
-        res = await api.get("/tickets/page", {
-          pageNum: page,
-          perPage: this.perPage,
-        });
+        res = await this.getSpecificPage(page);
       }
 
       if (res.error) {

@@ -1,7 +1,13 @@
 <template>
   <div class="ticket-detail">
     <b-breadcrumb>
-      <b-breadcrumb-item href="/tickets">Ticket List</b-breadcrumb-item>
+      <b-breadcrumb-item
+        :to="{
+          name: 'Tickets',
+          params: { currentPageProp: currentPage, test: 'Hello' },
+        }"
+        >Ticket List
+      </b-breadcrumb-item>
       <b-breadcrumb-item active
         >{{ ticketId }}
         <b-badge
@@ -65,7 +71,7 @@ export default {
     };
   },
 
-  props: ["id"],
+  props: ["id", "currentPage"],
 
   mounted() {
     this.getTicketDetail(this.id);

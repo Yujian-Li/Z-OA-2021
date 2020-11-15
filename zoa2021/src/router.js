@@ -14,6 +14,7 @@ export default new Router({
       path: '/tickets',
       name: 'Tickets',
       component: () => import('./components/TicketList'),
+      props: true,
     },
     {
       path: '/tickets/:id',
