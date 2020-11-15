@@ -42,6 +42,15 @@
         >
       </template>
     </b-table>
+
+    <b-modal v-model="showModal" hide-footer>
+      <div v-for="(err, index) in error" :key="index">
+        <h5>{{ err }}</h5>
+      </div>
+      <b-button class="mt-3" variant="outline-primary" href="/tickets"
+        >Try Again</b-button
+      >
+    </b-modal>
   </div>
 </template>
 <script>
@@ -59,6 +68,8 @@ export default {
       previousPage: null,
       updating: false,
       rows: null,
+      error: [],
+      showModal: false,
       fields: [
         {
           key: "id",
@@ -88,9 +99,11 @@ export default {
 
   methods: {
     async getTotal() {
-      const total = (await api.get("/tickets/count")).data.count;
-      if (total.refreshed_at === null) {
-        this.rows = total.value;
+      const response = (await api.get("/tickets/count")).data;
+      if (response.error) {
+        this.error.append(response.error);
+      } else if (response.count.refreshed_at === null) {
+        this.rows = response.count.value;
         this.updating = true;
         //not sure
         setTimeout(this.getTotal, 10000);
@@ -98,16 +111,14 @@ export default {
         if (this.updating) {
           // show snackbar
         }
-        this.rows = total.value;
+        this.rows = response.count.value;
         this.updating = false;
       }
     },
     async getFirstPage() {
-      const res = (
-        await api.get("/tickets/pagebysize", {
-          perPage: this.perPage,
-        })
-      ).data.tickets;
+      const res = await api.get("/tickets/pagebysize", {
+        perPage: this.perPage,
+      });
       return res;
     },
     async getPageTickets(context) {
@@ -120,25 +131,33 @@ export default {
         this.links &&
         this.links.prev
       ) {
-        res = (await api.get("/tickets/neighbor", { url: this.links.prev }))
-          .data.tickets;
+        res = await api.get("/tickets/neighbor", { url: this.links.prev });
       } else if (
         page - this.previousPage === 1 &&
         this.links &&
         this.links.next
       ) {
-        res = (await api.get("/tickets/neighbor", { url: this.links.next }))
-          .data.tickets;
+        res = await api.get("/tickets/neighbor", { url: this.links.next });
       } else {
-        res = (
-          await api.get("/tickets/page", {
-            pageNum: page,
-            perPage: this.perPage,
-          })
-        ).data.tickets;
+        res = await api.get("/tickets/page", {
+          pageNum: page,
+          perPage: this.perPage,
+        });
       }
-      this.links = res.links;
+
+      if (res.error) {
+        this.error.append(res.error);
+      } else {
+        res = res.data.tickets;
+        this.links = res.links;
+      }
+
+      if (this.error.length) {
+        this.showModal = true;
+      }
+
       this.previousPage = page;
+
       return res.tickets;
     },
   },
