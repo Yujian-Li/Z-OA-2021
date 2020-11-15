@@ -51,6 +51,33 @@
         >Try Again</b-button
       >
     </b-modal>
+
+    <b-toast
+      id="update"
+      variant="warning"
+      toaster="b-toaster-bottom-center"
+      solid
+      :no-close-button="false"
+    >
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-baseline">
+          <b-img
+            blank
+            blank-color="#ff5555"
+            class="mr-2"
+            width="12"
+            height="12"
+          ></b-img>
+          <strong class="mr-auto">New Tickets Available!</strong>
+        </div>
+      </template>
+      <b-button variant="outline-danger" @click="$bvToast.hide('update')"
+        >Dismiss</b-button
+      >
+      <b-button class="ml-3" variant="success" href="/tickets"
+        >Refresh</b-button
+      >
+    </b-toast>
   </div>
 </template>
 <script>
@@ -109,7 +136,7 @@ export default {
         setTimeout(this.getTotal, 10000);
       } else {
         if (this.updating) {
-          // show snackbar
+          this.$bvToast.show("update");
         }
         this.rows = response.count.value;
         this.updating = false;
