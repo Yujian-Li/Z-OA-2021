@@ -8,19 +8,17 @@ Node.js, Express.js, Vue.js, BootstrapVue
 
 ## Requirements
 
-Node (https://nodejs.org/en/download/)
+Node.js (https://nodejs.org/en/download/)
 
 ## Project setup
-
+```
 cd server
 
-```
 npm install
 ```
-
+```
 cd zoa2021
 
-```
 npm install
 ```
 
@@ -28,19 +26,21 @@ npm install
 
 Please follow the order:
 
-1. cd server
-
+1. Run server
 ```
+cd server
+
 npm start
 ```
 
-2. cd zoa2021
-
+2. Run frontend
 ```
+cd zoa2021
+
 npm run serve
 ```
 
-Go to the URL in terminal, usually it is http://localhost:8081/
+3. Go to the URL in terminal, usually it is http://localhost:8081/
 
 ## Usage Instruction
 
