@@ -9,7 +9,7 @@ module.exports = {
       res.json(response.data);
     } catch (ex) {
       console.log(ex);
-      res.json({ error: ex.message });
+      res.status(ex.response.status).json({ error: ex.message });
     }
   },
 
@@ -18,8 +18,7 @@ module.exports = {
       const response = await service.getTicketById(req.params.id);
       res.json(response.data);
     } catch (ex) {
-      console.log(ex);
-      res.json({ error: ex.message });
+      res.status(ex.response.status).json({ error: ex.message });
     }
   },
 
@@ -29,7 +28,7 @@ module.exports = {
       res.json({ tickets: response.data });
     } catch (ex) {
       console.log(ex);
-      res.json({ error: ex.message });
+      res.status(ex.response.status).json({ error: ex.message });
     }
   },
   getNeighborPage: async (req, res) => {
@@ -38,7 +37,7 @@ module.exports = {
       res.json({ tickets: response.data });
     } catch (ex) {
       console.log(ex);
-      res.json({ error: ex.message });
+      res.status(ex.response.status).json({ error: ex.message });
     }
   },
   getPage: async (req, res) => {
@@ -50,7 +49,7 @@ module.exports = {
       res.json({ tickets: response.data });
     } catch (ex) {
       console.log(ex);
-      res.json({ error: ex.message });
+      res.status(ex.response.status).json({ error: ex.message });
     }
   },
   getTotal: async (req, res) => {
@@ -59,7 +58,7 @@ module.exports = {
       res.json({ count: response.data.count });
     } catch (ex) {
       console.log(ex);
-      res.json({ error: ex.message });
+      res.status(ex.response.status).json({ error: ex.message });
     }
   },
 };
