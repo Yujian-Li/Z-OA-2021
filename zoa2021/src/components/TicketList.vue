@@ -165,7 +165,6 @@ export default {
     },
     async getPageTickets(context) {
       const page = context.currentPage;
-      console.log("geting page", page);
       let res = null;
 
       //Use curse pagination if possible, otherwise use offset pagination
