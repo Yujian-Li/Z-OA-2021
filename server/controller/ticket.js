@@ -2,7 +2,7 @@ const { response } = require('express');
 const service = require('../service/ticketService.js');
 
 module.exports = {
-  //getTicketList is not in user
+  //getTicketList is not in use
   getTicketList: async (req, res) => {
     try {
       const response = await service.getTicketList();

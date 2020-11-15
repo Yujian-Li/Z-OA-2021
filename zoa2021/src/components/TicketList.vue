@@ -132,7 +132,6 @@ export default {
       } else if (response.count.refreshed_at === null) {
         this.rows = response.count.value;
         this.updating = true;
-        //not sure
         setTimeout(this.getTotal, 10000);
       } else {
         if (this.updating) {
