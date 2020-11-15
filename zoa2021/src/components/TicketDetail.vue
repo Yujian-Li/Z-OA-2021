@@ -77,7 +77,6 @@ export default {
       if (response.error) {
         this.error = response.error;
         this.showModal = true;
-        console.log("hhbh", this.error);
       } else {
         this.ticket = response.ticket;
         this.ticketId = "Ticket #" + this.id;
