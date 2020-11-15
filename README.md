@@ -24,7 +24,7 @@ npm install
 
 ## Run
 
-Please follow the order:
+Please follow the 3 steps:
 
 1. Run server
 ```
