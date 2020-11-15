@@ -57,8 +57,6 @@
 
 <script>
 import api from "../api";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
 import moment from "moment";
 
 export default {
