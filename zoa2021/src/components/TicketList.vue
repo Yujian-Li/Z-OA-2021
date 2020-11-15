@@ -129,6 +129,8 @@ export default {
       const response = (await api.get("/tickets/count")).data;
       if (response.error) {
         this.error.append(response.error);
+
+        //If tickets are updating, check every 10 seconds to see if update is finished
       } else if (response.count.refreshed_at === null) {
         this.rows = response.count.value;
         this.updating = true;
@@ -150,6 +152,8 @@ export default {
     async getPageTickets(context) {
       const page = context.currentPage;
       let res = null;
+
+      //Use curse pagination if possible, otherwise use offset pagination
       if (this.previousPage === null) {
         res = await this.getFirstPage();
       } else if (
