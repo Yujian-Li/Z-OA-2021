@@ -22,7 +22,7 @@ cd zoa2021
 npm install
 ```
 
-## To Run
+## To run
 
 Please follow the 3 steps:
 
