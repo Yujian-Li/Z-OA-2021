@@ -22,7 +22,7 @@ cd zoa2021
 npm install
 ```
 
-## Run
+## To Run
 
 Please follow the 3 steps:
 
@@ -41,6 +41,23 @@ npm run serve
 ```
 
 3. Go to the URL in terminal, usually it is http://localhost:8081/
+
+## To run test
+
+1. Stop server if it is running.
+
+2. Frontend test:
+```
+cd zoa2021
+
+npm test
+```
+3. Backend test:
+```
+cd server
+
+npm test
+```
 
 ## Usage Instruction
 
