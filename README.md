@@ -26,7 +26,7 @@ npm install
 
 Please follow the 3 steps:
 
-1. Run server
+1. Run server (port 8080 need to be free)
 ```
 cd server
 
@@ -40,7 +40,7 @@ cd zoa2021
 npm run serve
 ```
 
-3. Go to the URL in terminal, usually it is http://localhost:8081/
+3. Go to the URL shown in terminal, usually it is http://localhost:8081/
 
 ## To run test
 
